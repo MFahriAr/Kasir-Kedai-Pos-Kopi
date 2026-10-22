@@ -1,16 +1,21 @@
-# Kasir Kedai Pos Kopi - Java Swing POS
-> **Platform Target**: **Apache NetBeans IDE** / Standar Java SE (JDK 17+)
+# Kasir Kedai Pos Kopi - Java Swing & Web POS
+> **Platform Target**: **Apache NetBeans IDE (Java SE)** & **Web Browser (GitHub Pages)**
 
 ---
 
 ## 1. Struktur Folder Proyek
-Proyek dirancang dengan pola arsitektur **MVC (Model - Service/Controller - View)** yang terpisah rapi:
+Proyek dirancang dengan pola arsitektur **MVC (Model - Service/Controller - View)** yang terpisah rapi serta dilengkapi versi Web untuk GitHub Pages:
 
 ```
 Kasir/
 ├── pom.xml                                      <- Konfigurasi standar Maven (untuk dibuka di NetBeans)
-├── run.bat                                      <- Script sekali klik untuk kompilasi & jalankan aplikasi GUI
+├── index.html                                   <- Website POS Kasir (Deploy langsung ke GitHub Pages)
+├── style.css                                    <- Styling modern antislop tema Kedai Kopi
+├── app.js                                       <- Logika Web POS, Diskon Polimorfis, & LocalStorage
+├── KasirKedaiPosKopi.jar                         <- File aplikasi Java siap klik (Standalone)
+├── run.bat                                      <- Script sekali klik untuk kompilasi & jalankan Java GUI
 ├── run-test.bat                                 <- Script sekali klik untuk uji logika OOP via Terminal
+├── push-ke-github.bat                           <- Script sekali klik untuk upload & deploy ke GitHub
 ├── README.md                                    <- Dokumentasi teknis proyek & penjelasan tugas
 └── src/
     └── main/
@@ -118,26 +123,26 @@ Aplikasi ini mengimplementasikan seluruh pilar PBO yang diminta:
 - Untuk menguji logika OOP melalui terminal/command prompt, double-click **`run-test.bat`**.
 - Untuk menjalankan file JAR executable langsung: double-click **`KasirKedaiPosKopi.jar`**.
 
+### Opsi 3: Membuka Website POS di Browser
+- Cukup double-click file **`index.html`** di browser manapun (Chrome, Edge, Firefox). Website POS siap digunakan secara instan tanpa perlu web server!
+
 ---
 
-## 5. Cara Upload & Deploy Otomatis ke GitHub
+## 5. Cara Upload & Deploy Otomatis ke GitHub Pages
 
-Repositori ini sudah dilengkapi konfigurasi standar GitHub dan **GitHub Actions CI/CD** (`.github/workflows/deploy.yml`).
+Repositori ini sudah dilengkapi konfigurasi standar GitHub dan **GitHub Actions CI/CD** (`.github/workflows/deploy.yml`) yang otomatis men-deploy **Website POS ke GitHub Pages** dan mengompilasi **Aplikasi Java**:
 
-### Langkah Cepat (Menggunakan Script Otomatis):
-1. Buka [GitHub.com](https://github.com), buat repository baru (misal: `Kasir-Kedai-Pos-Kopi`). Biarkan kosong (jangan centang *Add README*).
-2. Salin link URL repository Anda (misal: `https://github.com/MFahriAr/Kasir-Kedai-Pos-Kopi.git`).
+### Langkah Upload:
+1. Buka [GitHub.com](https://github.com), buat repository baru (misal: `Kasir-Kedai-Pos-Kopi`). Biarkan kosong tanpa mencentang *Add README*.
+2. Salin URL repository Anda (misal: `https://github.com/MFahriAr/Kasir-Kedai-Pos-Kopi.git`).
 3. Di dalam folder `Kasir`, double-click file **`push-ke-github.bat`**.
 4. Paste URL repository GitHub Anda saat diminta, lalu tekan **Enter**.
-5. Selesai! Semua file rapi ter-upload ke GitHub dan GitHub Actions akan otomatis men-deploy aplikasi.
+5. Tunggu proses selesai!
 
-### Langkah Manual via Terminal (PowerShell / CMD):
-```bash
-git remote add origin https://github.com/USERNAME/NAMA-REPO.git
-git branch -M main
-git push -u origin main
-```
-
-> **Fitur Auto-Deploy GitHub Actions**:
-> Setiap kali kode di-push ke GitHub, sistem CI/CD GitHub Actions akan otomatis mengompilasi kode Java, membuat file `KasirKedaiPosKopi.jar`, dan menyediakannya sebagai artifact yang dapat diunduh di tab **Actions** repository GitHub Anda.
-"# Kasir-Kedai-Pos-Kopi" 
+### Mengaktifkan Live Website di GitHub Pages:
+1. Di repository GitHub Anda, buka menu **Settings** $\rightarrow$ **Pages** (di sidebar kiri).
+2. Di bagian **Build and deployment** $\rightarrow$ **Source**, pilih **Deploy from a branch**.
+3. Pilih Branch: **`main`** dan Folder: **`/ (root)`**, lalu klik **Save**.
+4. Dalam 1-2 menit, website POS Anda akan aktif secara langsung di URL:
+   `https://<username>.github.io/<nama-repo>/`
+5. Aplikasi Java `KasirKedaiPosKopi.jar` juga otomatis tersedia untuk diunduh di tab **Actions**.

@@ -1,0 +1,67 @@
+name: Build Java App and Deploy Web to GitHub Pages
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # 1. Kompilasi & Build Aplikasi Java Desktop
+  build-java:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+
+    - name: Compile Java Sources
+      run: |
+        mkdir -p build_output
+        find src/main/java -name "*.java" > sources.txt
+        javac -encoding UTF-8 -d build_output @sources.txt
+
+    - name: Package Executable JAR
+      run: |
+        jar --create --file KasirKedaiPosKopi.jar --main-class com.kasir.Main -C build_output .
+
+    - name: Upload Executable JAR Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: KasirKedaiPosKopi-Standalone-App
+        path: KasirKedaiPosKopi.jar
+
+  # 2. Deploy Website Kasir ke GitHub Pages
+  deploy-web:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Pages
+      uses: actions/configure-pages@v5
+
+    - name: Upload Pages Artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: '.'
+
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
