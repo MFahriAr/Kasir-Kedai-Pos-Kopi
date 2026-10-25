@@ -22,6 +22,8 @@ import java.util.Locale;
  */
 public class ProdukPanel extends JPanel {
 
+    private static final long serialVersionUID = 1L;
+
     private final ProdukService produkService;
     private final Runnable dataChangeListener;
 
@@ -202,17 +204,17 @@ public class ProdukPanel extends JPanel {
         btnTambah.setPreferredSize(new Dimension(0, 38));
         btnTambah.addActionListener(e -> tambahProduk());
 
-        btnUpdate = AppButton.update("✓ Simpan Update");
+        btnUpdate = AppButton.update("Simpan Perubahan");
         btnUpdate.setPreferredSize(new Dimension(0, 38));
         btnUpdate.setEnabled(false);
         btnUpdate.addActionListener(e -> updateProduk());
 
-        btnHapus = AppButton.danger("✕ Hapus Produk");
+        btnHapus = AppButton.danger("Hapus Produk");
         btnHapus.setPreferredSize(new Dimension(0, 38));
         btnHapus.setEnabled(false);
         btnHapus.addActionListener(e -> hapusProduk());
 
-        btnReset = AppButton.secondary("↺ Bersihkan Form");
+        btnReset = AppButton.secondary("Bersihkan Form");
         btnReset.setPreferredSize(new Dimension(0, 38));
         btnReset.addActionListener(e -> resetForm());
 

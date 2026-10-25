@@ -14,6 +14,8 @@ import java.awt.event.MouseEvent;
  */
 public class AppButton extends JButton {
 
+    private static final long serialVersionUID = 1L;
+
     private final Color bgNormal;
     private final Color bgHover;
     private final Color bgPressed;

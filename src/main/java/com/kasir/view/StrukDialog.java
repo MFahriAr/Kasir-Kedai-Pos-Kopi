@@ -11,6 +11,8 @@ import java.awt.*;
  */
 public class StrukDialog extends JDialog {
 
+    private static final long serialVersionUID = 1L;
+
     public StrukDialog(Frame parent, Transaksi transaksi) {
         super(parent, "Struk Pembayaran - " + transaksi.getNoNota(), true);
         initComponents(transaksi);

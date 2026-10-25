@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kasir Kedai Pos Kopi - Web POS &amp; Inventaris</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- HEADER UTAMA -->
+    <header class="app-header">
+        <div class="header-brand">
+            <div class="brand-icon" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                    <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                    <line x1="6" y1="1" x2="6" y2="4"></line>
+                    <line x1="10" y1="1" x2="10" y2="4"></line>
+                    <line x1="14" y1="1" x2="14" y2="4"></line>
+                </svg>
+            </div>
+            <div class="brand-text">
+                <h1>KASIR KEDAI POS KOPI</h1>
+                <p>Spesialis Kopi, Camilan &amp; Perlengkapan Barista</p>
+            </div>
+        </div>
+        <div class="header-status">
+            <span class="cashier-badge">
+                <span class="status-indicator-dot" aria-hidden="true"></span>
+                Kasir: Admin Standar
+            </span>
+            <span id="current-clock" class="clock-badge">--:--:--</span>
+        </div>
+    </header>
+
+    <!-- NAVIGASI TAB UTAMA -->
+    <nav class="app-nav" aria-label="Navigasi Menu Kasir">
+        <button class="nav-tab active" data-tab="pos" type="button">Point of Sales (Kasir)</button>
+        <button class="nav-tab" data-tab="crud" type="button">Manajemen Menu &amp; Stok (CRUD)</button>
+        <button class="nav-tab" data-tab="history" type="button">Riwayat Penjualan</button>
+    </nav>
+
+    <!-- KONTEN APLIKASI -->
+    <main class="app-container">
+
+        <!-- ================= TAB 1: POINT OF SALES ================= -->
+        <section id="tab-pos" class="tab-content active" aria-labelledby="heading-pos">
+            <div class="pos-layout">
+                
+                <!-- KOLOM KIRI: KATALOG PRODUK -->
+                <div class="catalog-column">
+                    <div class="catalog-header">
+                        <div class="search-box">
+                            <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                            <input type="text" id="pos-search" placeholder="Cari kopi, pastry, atau alat barista...">
+                        </div>
+                        <div class="category-filters" id="category-pills" role="group" aria-label="Filter Kategori Produk">
+                            <button class="filter-pill active" data-cat="all" type="button">Semua Menu</button>
+                            <button class="filter-pill" data-cat="Makanan/Minuman" type="button">Kopi &amp; Makanan</button>
+                            <button class="filter-pill" data-cat="Elektronik/Gadget" type="button">Alat &amp; Elektronik</button>
+                        </div>
+                    </div>
+
+                    <div class="product-grid" id="product-grid">
+                        <!-- Kartu produk di-render dinamis oleh app.js -->
+                    </div>
+                </div>
+
+                <!-- KOLOM KANAN: KERANJANG & CHECKOUT -->
+                <aside class="checkout-column" aria-label="Ringkasan Pesanan">
+                    <div class="checkout-card">
+                        <div class="checkout-header">
+                            <div>
+                                <h2>Keranjang Pesanan</h2>
+                                <span class="nota-number" id="active-nota">TRX-20261022-001</span>
+                            </div>
+                            <button class="btn-clear-cart" id="btn-clear-cart" title="Kosongkan Keranjang" type="button">Kosongkan</button>
+                        </div>
+
+                        <!-- Daftar Item Keranjang -->
+                        <div class="cart-items-container" id="cart-items">
+                            <div class="empty-state">
+                                <p>Keranjang masih kosong.</p>
+                                <span>Pilih item di katalog untuk menambahkan pesanan.</span>
+                            </div>
+                        </div>
+
+                        <!-- Ringkasan Perhitungan & Diskon Polimorfis -->
+                        <div class="checkout-summary">
+                            <div class="summary-row">
+                                <span>Subtotal Belanja</span>
+                                <span id="cart-subtotal" class="font-mono">Rp 0</span>
+                            </div>
+                            <div class="summary-row discount-row">
+                                <span>Diskon Otomatis (Polimorfis)</span>
+                                <span id="cart-discount" class="font-mono">-Rp 0</span>
+                            </div>
+
+                            <!-- Kartu Grand Total Utama -->
+                            <div class="grand-total-banner">
+                                <div class="total-label-wrap">
+                                    <span class="total-caption">Total Tagihan</span>
+                                    <span class="total-subcaption">Termasuk Pajak &amp; Diskon</span>
+                                </div>
+                                <span id="cart-grand-total" class="total-value font-mono">Rp 0</span>
+                            </div>
+
+                            <!-- Input Nominal Pembayaran -->
+                            <div class="payment-input-group">
+                                <label for="input-bayar">Nominal Pembayaran Tunai (Rp):</label>
+                                <div class="payment-input-wrapper">
+                                    <span class="currency-prefix">Rp</span>
+                                    <input type="number" id="input-bayar" placeholder="0" min="0" step="1000">
+                                </div>
+                            </div>
+
+                            <!-- Tombol Cepat Uang Pas & Pecahan -->
+                            <div class="quick-cash-row" role="group" aria-label="Pilihan Cepat Nominal Uang">
+                                <button class="btn-quick-cash" id="btn-exact-cash" type="button">Uang Pas</button>
+                                <button class="btn-quick-cash" data-cash="50000" type="button">50K</button>
+                                <button class="btn-quick-cash" data-cash="100000" type="button">100K</button>
+                                <button class="btn-quick-cash" data-cash="200000" type="button">200K</button>
+                            </div>
+
+                            <div class="change-box">
+                                <span class="change-label">Kembalian:</span>
+                                <span id="cart-change" class="change-amount font-mono">Rp 0</span>
+                            </div>
+
+                            <!-- Tombol Aksi Akhir -->
+                            <button class="btn-checkout" id="btn-process-checkout" type="button">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                <span>Bayar &amp; Cetak Struk</span>
+                            </button>
+                        </div>
+                    </div>
+                </aside>
+
+            </div>
+        </section>
+
+        <!-- ================= TAB 2: MANAJEMEN CRUD PRODUK ================= -->
+        <section id="tab-crud" class="tab-content" aria-labelledby="heading-crud">
+            <div class="crud-layout">
+                <!-- FORM TAMBAH / UPDATE PRODUK -->
+                <div class="crud-form-card">
+                    <h2 id="form-title">Tambah Produk Baru</h2>
+                    <form id="product-form">
+                        <input type="hidden" id="form-mode" value="create">
+
+                        <div class="form-group">
+                            <label for="p-kategori">Kategori Produk</label>
+                            <select id="p-kategori" required>
+                                <option value="Makanan/Minuman">Makanan / Minuman Kopi</option>
+                                <option value="Elektronik/Gadget">Elektronik / Alat Kopi</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="p-kode">Kode Produk (Unik)</label>
+                            <input type="text" id="p-kode" placeholder="Misal: M05 atau E05" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="p-nama">Nama Produk</label>
+                            <input type="text" id="p-nama" placeholder="Misal: Kopi Susu Pandan" required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="p-harga">Harga Satuan (Rp)</label>
+                                <input type="number" id="p-harga" placeholder="20000" min="1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="p-stok">Stok Awal</label>
+                                <input type="number" id="p-stok" placeholder="10" min="0" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="p-info" id="lbl-info-khusus">Tanggal Kadaluarsa</label>
+                            <input type="text" id="p-info" placeholder="2026-12-31" required>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary" id="btn-save-product">+ Tambah Produk</button>
+                            <button type="button" class="btn-secondary" id="btn-reset-form">Reset Form</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- TABEL DATA PRODUK LENGKAP -->
+                <div class="crud-table-card">
+                    <div class="table-card-header">
+                        <h2>Daftar Menu &amp; Inventaris</h2>
+                        <div class="table-search-wrap">
+                            <input type="text" id="crud-search" placeholder="Cari dalam tabel inventaris...">
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Kode</th>
+                                    <th>Kategori</th>
+                                    <th>Nama Produk</th>
+                                    <th class="text-right">Harga</th>
+                                    <th class="text-right">Stok</th>
+                                    <th>Info Khusus</th>
+                                    <th class="text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="crud-table-body">
+                                <!-- Baris tabel di-render dinamis oleh app.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 3: RIWAYAT PENJUALAN ================= -->
+        <section id="tab-history" class="tab-content" aria-labelledby="heading-history">
+            <div class="history-card">
+                <div class="history-header">
+                    <h2>Riwayat Transaksi Penjualan</h2>
+                    <span id="history-count" class="history-count-badge">Total Transaksi: 0</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>No. Nota</th>
+                                <th>Waktu Transaksi</th>
+                                <th>Jumlah Item</th>
+                                <th class="text-right">Total Belanja</th>
+                                <th class="text-right">Total Diskon</th>
+                                <th class="text-right">Grand Total</th>
+                                <th class="text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-table-body">
+                            <!-- Riwayat di-render dinamis oleh app.js -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL STRUK CETAK THERMAL -->
+    <div class="modal-backdrop" id="receipt-modal" role="dialog" aria-modal="true" aria-labelledby="receipt-title">
+        <div class="receipt-dialog">
+            <div class="receipt-header-bar">
+                <h3 id="receipt-title">Nota Pembayaran Berhasil</h3>
+                <button class="btn-close-modal" id="btn-close-modal" aria-label="Tutup Nota">&times;</button>
+            </div>
+            <div class="receipt-paper">
+                <pre id="receipt-text"></pre>
+            </div>
+            <div class="receipt-footer-bar">
+                <button class="btn-secondary" id="btn-print-receipt" type="button">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                        <rect x="6" y="14" width="12" height="8"></rect>
+                    </svg>
+                    <span>Cetak Struk (Print)</span>
+                </button>
+                <button class="btn-primary" id="btn-done-receipt" type="button">Transaksi Baru</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

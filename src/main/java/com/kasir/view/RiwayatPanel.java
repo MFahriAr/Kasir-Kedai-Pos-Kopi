@@ -17,6 +17,8 @@ import java.util.Locale;
  */
 public class RiwayatPanel extends JPanel {
 
+    private static final long serialVersionUID = 1L;
+
     private final TransaksiService transaksiService;
     private final Frame parentFrame;
     private JTable tabelRiwayat;

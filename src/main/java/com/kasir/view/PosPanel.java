@@ -23,6 +23,8 @@ import java.util.Locale;
  */
 public class PosPanel extends JPanel {
 
+    private static final long serialVersionUID = 1L;
+
     private final ProdukService produkService;
     private final TransaksiService transaksiService;
     private final Frame parentFrame;
@@ -172,7 +174,7 @@ public class PosPanel extends JPanel {
         lblTitleKeranjang.setFont(new Font("Segoe UI", Font.BOLD, 14));
         lblTitleKeranjang.setForeground(new Color(30, 41, 59));
 
-        btnHapusItem = AppButton.danger("✕ Hapus Item");
+        btnHapusItem = AppButton.danger("Hapus Item");
         btnHapusItem.setFont(new Font("Segoe UI", Font.BOLD, 12));
         btnHapusItem.addActionListener(e -> hapusItemTerpilih());
 
@@ -264,12 +266,12 @@ public class PosPanel extends JPanel {
         panelTombolCheckout.setOpaque(false);
         panelTombolCheckout.setBorder(BorderFactory.createEmptyBorder(12, 0, 0, 0));
 
-        btnBatal = AppButton.secondary("↺ Reset Transaksi");
+        btnBatal = AppButton.secondary("Reset Transaksi");
         btnBatal.setPreferredSize(new Dimension(0, 44));
         btnBatal.setFont(new Font("Segoe UI", Font.BOLD, 13));
         btnBatal.addActionListener(e -> batalkanTransaksi());
 
-        btnBayar = AppButton.success("✓ Bayar & Cetak Struk");
+        btnBayar = AppButton.success("Bayar & Cetak Struk");
         btnBayar.setPreferredSize(new Dimension(0, 44));
         btnBayar.setFont(new Font("Segoe UI", Font.BOLD, 14));
         btnBayar.addActionListener(e -> prosesPembayaran());

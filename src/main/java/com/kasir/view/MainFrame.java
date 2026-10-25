@@ -12,6 +12,8 @@ import java.awt.*;
  */
 public class MainFrame extends JFrame {
 
+    private static final long serialVersionUID = 1L;
+
     private final ProdukService produkService;
     private final TransaksiService transaksiService;
 
