@@ -1,19 +1,29 @@
 package com.kasir.model;
 
 /**
- * ABSTRAKSI (Abstraction) & ENKAPSULASI (Encapsulation)
- * Kelas abstrak dasar yang mendefinisikan atribut umum dan perilaku produk.
- * Memiliki abstract method yang wajib diimplementasikan oleh kelas turunannya.
+ * ============================================================================
+ * [TANDA 1 - ABSTRAKSI: KELAS ABSTRAK DASAR]
+ * Menggunakan kata kunci 'abstract class'.
+ * 1. Tidak bisa di-instansiasi langsung dengan 'new Produk()'.
+ * 2. Berfungsi sebagai kerangka umum/cetak biru (blueprint) untuk seluruh produk kasir.
+ * ============================================================================
  */
 public abstract class Produk {
 
-    // ATRIBUT (Encapsulation: modifier private)
+    // ========================================================================
+    // [TANDA 2 - ENKAPSULASI: ATRIBUT PRIVATE / DATA HIDING]
+    // Semua variabel internal ditutup dengan access modifier 'private'.
+    // Mencegah manipulasi variabel secara langsung dari luar kelas.
+    // ========================================================================
     private String kode;
     private String nama;
     private double harga;
     private int stok;
 
-    // Konstruktor
+    /**
+     * [TANDA 3 - ENKAPSULASI: KONSTRUKTOR DENGAN VALIDASI DATA]
+     * Menjamin data awal objek yang dibuat selalu valid (tidak null, tidak minus).
+     */
     public Produk(String kode, String nama, double harga, int stok) {
         if (kode == null || kode.trim().isEmpty()) {
             throw new IllegalArgumentException("Kode produk tidak boleh kosong.");
@@ -34,7 +44,10 @@ public abstract class Produk {
         this.stok = stok;
     }
 
-    // ================= ENKAPSULASI: GETTER & SETTER =================
+    // ========================================================================
+    // [TANDA 4 - ENKAPSULASI: GETTER & SETTER DENGAN VALIDASI INTEGRITAS DATA]
+    // Pintu akses resmi (metode public) untuk membaca dan memodifikasi data.
+    // ========================================================================
 
     public String getKode() {
         return kode;
@@ -52,7 +65,7 @@ public abstract class Produk {
     }
 
     public void setNama(String nama) {
-        if (nama == null || nama.trim().isEmpty()) {
+        if (nama == null || kode.trim().isEmpty()) {
             throw new IllegalArgumentException("Nama produk tidak boleh kosong.");
         }
         this.nama = nama.trim();
@@ -80,7 +93,11 @@ public abstract class Produk {
         this.stok = stok;
     }
 
-    // Metode mutator dengan logika bisnis
+    // ========================================================================
+    // [TANDA 5 - ENKAPSULASI: METHOD MUTATOR LOGIKA BISNIS (BUSINESS RULES)]
+    // Melindungi stok dari keadaan tidak logis (misalnya stok minus).
+    // ========================================================================
+
     public void kurangiStok(int jumlah) {
         if (jumlah <= 0) {
             throw new IllegalArgumentException("Jumlah pengurangan stok harus lebih dari 0.");
@@ -98,26 +115,30 @@ public abstract class Produk {
         this.stok += jumlah;
     }
 
-    // ================= ABSTRAKSI: ABSTRACT METHODS =================
+    // ========================================================================
+    // [TANDA 6 - ABSTRAKSI: ABSTRACT METHOD (KONTRAK WAJIB)]
+    // Method tanpa body (hanya deklarasi nama, parameter, dan return type).
+    // Memaksa setiap subclass (ProdukMakanan, ProdukElektronik) membuat implementasinya.
+    // ========================================================================
     
     /**
-     * Menghitung besaran diskon berdasarkan jenis produk dan kuantiti pembelian.
-     * Akan diimplementasikan secara spesifik (Polimorfisme) oleh masing-masing subclass.
+     * Kontrak perhitungan diskon:
+     * Detail rumus diserahkan ke masing-masing kelas turunan.
      */
     public abstract double hitungDiskon(int kuantiti);
 
     /**
-     * Mengembalikan nama kategori produk (misal: "Makanan", "Elektronik").
+     * Kontrak kategori produk:
      */
     public abstract String getKategori();
 
     /**
-     * Mengembalikan informasi spesifik subclass (misal: tanggal kadaluarsa atau masa garansi).
+     * Kontrak informasi khusus spesifik subclass (kadaluarsa / garansi):
      */
     public abstract String getInfoKhusus();
 
     /**
-     * Memperbarui informasi spesifik subclass.
+     * Kontrak untuk memperbarui informasi khusus:
      */
     public abstract void setInfoKhusus(String info);
 

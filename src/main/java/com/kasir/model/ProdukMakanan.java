@@ -1,17 +1,29 @@
 package com.kasir.model;
 
 /**
- * PEWARISAN (Inheritance) & POLIMORFISME (Polymorphism)
- * Subclass dari Produk khusus untuk produk Makanan & Minuman.
- * Mewarisi atribut dan method dari class Produk, serta menambahkan atribut tanggalKadaluarsa.
+ * ============================================================================
+ * [TANDA 7 - PEWARISAN (INHERITANCE): KATA KUNCI 'extends']
+ * Class ProdukMakanan mewarisi (menjadi subclass dari) class Produk.
+ * Seluruh atribut (kode, nama, harga, stok) dan method (getHarga, kurangiStok, dll.)
+ * langsung dimiliki oleh ProdukMakanan tanpa perlu dideklarasikan ulang.
+ * ============================================================================
  */
 public class ProdukMakanan extends Produk {
 
-    // Atribut tambahan spesifik ProdukMakanan (Enkapsulasi)
+    // ========================================================================
+    // [TANDA 8 - SPESIALISASI & ENKAPSULASI ATRIBUT SUBCLASS]
+    // Atribut unik yang hanya dimiliki makanan (tanggal kadaluarsa).
+    // Tetap dienkapsulasi dengan modifier 'private'.
+    // ========================================================================
     private String tanggalKadaluarsa;
 
+    /**
+     * [TANDA 9 - PEWARISAN KONSTRUKTOR: KATA KUNCI 'super(...)']
+     * Memanggil konstruktor milik superclass (Produk) untuk menginisialisasi
+     * atribut dasar: kode, nama, harga, stok.
+     */
     public ProdukMakanan(String kode, String nama, double harga, int stok, String tanggalKadaluarsa) {
-        super(kode, nama, harga, stok); // Memanggil konstruktor superclass
+        super(kode, nama, harga, stok); // Eksekusi validasi dan inisialisasi class induk
         this.tanggalKadaluarsa = (tanggalKadaluarsa != null && !tanggalKadaluarsa.trim().isEmpty()) 
                 ? tanggalKadaluarsa.trim() 
                 : "-";
@@ -25,17 +37,16 @@ public class ProdukMakanan extends Produk {
         this.tanggalKadaluarsa = tanggalKadaluarsa;
     }
 
-    // ================= POLIMORFISME: METHOD OVERRIDING =================
-
-    /**
-     * Logika diskon polimorfis untuk Makanan:
-     * Pembelian grosir (kuantiti >= 5 item) mendapat potongan 10% dari subtotal barang tersebut.
-     */
+    // ========================================================================
+    // [TANDA 10 - POLIMORFISME & REALISASI ABSTRAKSI: METHOD OVERRIDING]
+    // Memberikan implementasi konkret untuk abstract method yang diwarisi dari Produk.
+    // Menghitung diskon khusus makanan: Grosir >= 5 item dapat potongan 10%.
+    // ========================================================================
     @Override
     public double hitungDiskon(int kuantiti) {
         if (kuantiti >= 5) {
             double totalHarga = getHarga() * kuantiti;
-            return totalHarga * 0.10; // Diskon 10%
+            return totalHarga * 0.10; // Potongan 10%
         }
         return 0.0;
     }

@@ -1,17 +1,26 @@
 package com.kasir.model;
 
 /**
- * PEWARISAN (Inheritance) & POLIMORFISME (Polymorphism)
- * Subclass dari Produk khusus untuk produk Elektronik & Gadget.
- * Mewarisi atribut dan method dari class Produk, serta menambahkan atribut garansiBulan.
+ * ============================================================================
+ * [TANDA 11 - PEWARISAN (INHERITANCE): KATA KUNCI 'extends']
+ * Class ProdukElektronik mewarisi (menjadi subclass dari) class Produk.
+ * Menghindari penulisan ulang kode untuk atribut umum produk.
+ * ============================================================================
  */
 public class ProdukElektronik extends Produk {
 
-    // Atribut tambahan spesifik ProdukElektronik (Enkapsulasi)
+    // ========================================================================
+    // [TANDA 12 - SPESIALISASI & ENKAPSULASI ATRIBUT SUBCLASS]
+    // Atribut unik khusus produk elektronik (masa garansi dalam bulan).
+    // ========================================================================
     private int garansiBulan;
 
+    /**
+     * [TANDA 13 - PEWARISAN KONSTRUKTOR: KATA KUNCI 'super(...)']
+     * Mendelegasikan inisialisasi kode, nama, harga, dan stok ke class Produk.
+     */
     public ProdukElektronik(String kode, String nama, double harga, int stok, int garansiBulan) {
-        super(kode, nama, harga, stok); // Memanggil konstruktor superclass
+        super(kode, nama, harga, stok);
         this.garansiBulan = Math.max(0, garansiBulan);
     }
 
@@ -23,13 +32,11 @@ public class ProdukElektronik extends Produk {
         this.garansiBulan = Math.max(0, garansiBulan);
     }
 
-    // ================= POLIMORFISME: METHOD OVERRIDING =================
-
-    /**
-     * Logika diskon polimorfis untuk Elektronik:
-     * Jika total belanja barang elektronik ini >= Rp 500.000,
-     * pelanggan berhak mendapatkan diskon promo sebesar 5%.
-     */
+    // ========================================================================
+    // [TANDA 14 - POLIMORFISME & REALISASI ABSTRAKSI: METHOD OVERRIDING]
+    // Implementasi diskon spesifik untuk barang elektronik:
+    // Jika subtotal >= Rp 500.000, pelanggan berhak mendapatkan diskon promo 5%.
+    // ========================================================================
     @Override
     public double hitungDiskon(int kuantiti) {
         double subtotal = getHarga() * kuantiti;
@@ -52,7 +59,6 @@ public class ProdukElektronik extends Produk {
     @Override
     public void setInfoKhusus(String info) {
         try {
-            // Mengambil angka saja jika string berisi teks seperti "12 Bulan"
             String cleaned = info.replaceAll("[^0-9]", "");
             this.garansiBulan = cleaned.isEmpty() ? 0 : Integer.parseInt(cleaned);
         } catch (NumberFormatException e) {
